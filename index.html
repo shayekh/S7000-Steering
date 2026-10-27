@@ -302,6 +302,14 @@ body.locked #login{display:grid}
 .sample{background:var(--warn-soft);color:var(--warn);padding:2px 10px;border-radius:99px;font-size:11.5px;font-weight:700;white-space:nowrap}
 .cbtn{border:1px solid var(--line);background:var(--panel);border-radius:99px;padding:4px 12px;font-size:12.5px;font-weight:600;color:var(--primary);cursor:pointer}
 .cbtn:hover{background:var(--primary-soft)}
+.cbtn[hidden]{display:none}
+#health{position:relative}
+.cbar{position:absolute;top:0;right:0}
+/* Comment buttons stay hidden until the section is hovered or focused; always faintly visible on touch screens */
+.cbtn.cauto{opacity:0;transition:opacity .15s}
+.psec:hover .cbtn.cauto,.pheader:hover .cbtn.cauto,#health:hover .cbtn.cauto,.head:hover .cbtn.cauto,.psec:focus-within .cbtn.cauto,.pheader:focus-within .cbtn.cauto,#health:focus-within .cbtn.cauto,.head:focus-within .cbtn.cauto,.cbtn.cauto:focus-visible{opacity:1}
+@media (hover:none){.cbtn.cauto{opacity:.75}}
+.head .tools{display:flex;gap:8px;align-items:center}
 .pgrid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));margin-bottom:16px}
 .pgrid .psec{margin-bottom:0}
 .objs{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr))}
@@ -339,9 +347,48 @@ body.locked #login{display:grid}
 .pill.cmain{color:var(--primary);cursor:pointer;font-weight:700}
 .pill.cmain:hover{background:var(--primary-soft)}
 
+.mfilter{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end}
+.mfilter label{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:700;color:var(--muted)}
+.mfilter select,.mfilter input{padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit;font-size:14px;min-width:150px}
+.mfilter input{min-width:220px}
+.mlist{display:grid;gap:12px;margin-top:14px}
+.mrow{display:grid;gap:6px;border:1px solid var(--line);background:var(--bg);border-radius:14px;padding:14px 16px;text-decoration:none;color:inherit}
+.mrow:hover{background:var(--primary-soft);border-color:var(--primary)}
+.mrow b{font-size:15px;font-weight:700}
+.mrow .mw{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:12.5px;color:var(--muted)}
+.mrow p{margin:0;font-size:13.5px;color:var(--muted)}
+.dep{display:block;margin-top:6px;font-size:12.5px;font-weight:600;color:var(--primary);text-decoration:none}
+.dep:hover{text-decoration:underline}
+.mnav{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
+.mnav a{color:var(--primary);font-weight:700;text-decoration:none;font-size:14px}
+.mnav .off{color:var(--muted);font-weight:500;font-size:14px}
 #cmFloat{position:absolute;z-index:60;background:var(--primary);color:var(--panel);border:0;border-radius:99px;padding:6px 14px;font-weight:700;font-size:13px;box-shadow:var(--shadow);cursor:pointer}
+
+.goalrow{cursor:pointer}
+.goalrow:hover td,.goalrow:focus-visible td{background:var(--primary-soft)}
+.goalrow:focus-visible{outline:2px solid var(--primary);outline-offset:-2px}
+.gsum{display:flex;gap:6px 12px;flex-wrap:wrap;align-items:center}
+.glink{display:block;color:var(--primary);font-weight:600;margin-bottom:4px}
+.glink:hover{text-decoration:underline}
+.sddrow{cursor:pointer}
+.sddrow:hover{filter:brightness(.97)}
+.gmore{color:var(--primary);font-weight:700;font-size:12.5px;white-space:nowrap}
+.dwscrim{position:fixed;inset:0;background:rgba(14,16,32,.45);opacity:0;pointer-events:none;transition:opacity .2s;z-index:90}
+.dwscrim.on{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;height:100%;width:min(100%,440px);background:var(--panel);box-shadow:var(--shadow);transform:translateX(100%);visibility:hidden;transition:transform .25s,visibility .25s;z-index:91;display:flex;flex-direction:column;overflow:hidden}
+.drawer.on{transform:none;visibility:visible}
+@media (prefers-reduced-motion:reduce){.drawer,.dwscrim{transition:none}}
+.drawer header{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;padding:18px 18px 12px;border-bottom:1px solid var(--line)}
+.drawer header h2{margin:0;font-size:17px;line-height:1.3}
+.drawer .cbtn{flex:none;margin-left:auto}
+.drawer .dx{flex:none;border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:10px;width:34px;height:34px;font-size:18px;cursor:pointer}
+.drawer .dbody{padding:16px 18px 24px;overflow:auto;display:grid;gap:12px}
+.drawer .dlab{font-size:12px;color:var(--muted);font-weight:700;margin:0}
+.drawer .dact{border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:6px;background:var(--bg)}
+.drawer .dact p{margin:0;font-size:13.5px}
+.drawer .dwho{font-weight:700;font-size:13px}
+.drawer .dact .chipst,.goalrow .chipst{display:inline-block;width:auto;white-space:nowrap}
 </style>
-</head>
 <body class="locked">
 <div id="login">
   <div class="lgcard">
@@ -369,8 +416,9 @@ body.locked #login{display:grid}
       <a href="#p/tenant">Tenant Portal</a>
       <a href="#p/ai">AI Service Automation</a>
       <a href="#p/akademie">S7000 Akademie</a>
-      <a href="#collab">Working together</a>
+      <a href="#collab">Ad hoc Support</a>
       <a href="#ai">Collaboration with AI</a>
+      <a href="#minutes">Meeting minutes</a>
     </nav>
     <button class="pill signout" id="signOut" type="button">Sign out</button>
   </aside>
@@ -398,6 +446,7 @@ body.locked #login{display:grid}
 
     <div id="viewProject" hidden></div>
     <div id="viewCollab" hidden></div>
+    <div id="viewMinutes" hidden></div>
   </main>
 </div>
 
@@ -496,16 +545,17 @@ function planHtml(p){
 // ---- Portal health, delays and recovery (edit here; TBC = to be confirmed) ----
 const HEALTH = {
   customer:['ok','On track',''],
-  sam:['ok','Fully rolled out','Delivered later than planned'],
+  sam:['ok','Fully rolled out',''],
   tenant:['ok','On track',''],
   ai:['ok','On track',''],
   akademie:['ok','On track','']
 };
 const MAINT = ['tenant','ai']; // portals in maintenance mode
 const SIMPLE = { // portals with a simple details page (no project board): chip [style, label] and one message
-  sam:{chip:['ok','Fully rolled out'], msg:'No blockers. The full SAM rollout is done. It was delayed compared to the original plan because beta testing took longer than expected.'},
-  tenant:{chip:['ok','Good health'], msg:'No blockers. This project is in good health.'},
-  ai:{chip:['ok','Good health'], msg:'No blockers. This project is in good health.'}
+  // Placeholder until the details pages are prepared. Replace msg with the real details.
+  sam:{msg:'Details coming soon.'},
+  tenant:{msg:'Details coming soon.'},
+  ai:{msg:'Details coming soon.'}
 };
 const isSimple = id => Object.prototype.hasOwnProperty.call(SIMPLE, id);
 function renderSimple(id){
@@ -526,13 +576,14 @@ function renderSimple(id){
   $('#viewProject').innerHTML =
     `<div class="simple"><a class="back" href="#overview">&larr; All projects</a>
       <div class="scenter"><div class="card sbox">
-        <div class="phrow"><h1>${laneName(id)}</h1><span class="hp ${SIMPLE[id].chip[0]}">${SIMPLE[id].chip[1]}</span></div>
-        <p class="lead">${SIMPLE[id].msg}</p>
+        <div class="phrow"><h1>${laneName(id)}</h1></div>
+        <p class="lead">${S.msg}</p>
         <div class="meta"><span>Collaboration: <b>SELISE X Service 7000</b></span></div>
       </div></div>
     </div>`;
   wireComments();
 }
+const PHASE = {customer:'live', sam:'live', tenant:'live', ai:'live', akademie:'dev'}; // live = Live in production, dev = In development
 function health(){
   $('#hgrid').innerHTML = LANES.map(l=>{
     const h=HEALTH[l.id]||['ok','On track',''];
@@ -542,7 +593,9 @@ function health(){
     const nb = p ? p.blockers.length : (isSimple(l.id) && SIMPLE[l.id].blockers) ? SIMPLE[l.id].blockers.length : HOME.decisions.filter(d=>d[3]===l.t).length; // blockers: project board or details page, else open client decisions for this portal
     const ng = p ? p.milestones.length : null; // goals: shown once a project board exists
     const stats = `<div class="hstats"><span class="hp ${nb?'risk':'ok'}">${nb} ${nb===1?'blocker':'blockers'}</span>${ng!==null?`<span class="hp goals">${ng} ${ng===1?'goal':'goals'}</span>`:''}</div>`;
-    const inner = `<b>${l.t}</b>${stats}${h[2]?`<small>${h[2]}</small>`:''}${foot}`;
+    const tagCss = 'flex:none;white-space:nowrap;font-size:11.5px';
+    const ph = PHASE[l.id]==='dev' ? `<span class="hp" style="${tagCss};background:var(--dev-soft);color:var(--dev)">In development</span>` : PHASE[l.id]==='live' ? `<span class="hp ok" style="${tagCss}">Live in production</span>` : '';
+    const inner = `<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px"><b>${l.t}</b>${ph}</div>${stats}${h[2]?`<small>${h[2]}</small>`:''}${foot}`;
     return link ? `<a class="hc link" href="#p/${l.id}">${inner}</a>` : `<div class="hc">${inner}</div>`;
   }).join('');
 }
@@ -550,7 +603,7 @@ function health(){
 // ---- Project boards (sample data marked where it is placeholder) ----
 const PROJ = {
   customer:{
-    lane:'customer', name:'Customer Portal', health:['ok','On track'],
+    lane:'customer', name:'Customer Portal', health:['ok','Live in production'],
     phase:'Live',
     owners:[['SELISE','Product Manager'],['Client','Business lead']],
     summary:'Customer Portal is live in production for all users, with additional new features delivered. A dedicated Automation Testing portal, built for the Customer Portal, now tests it on every release, and B2B Self Registration is next.',
@@ -562,17 +615,17 @@ const PROJ = {
       ['Open a new channel for B2B clients by letting them register themselves','Growth']
     ],
     milestones:[
-      ['B2B customers get a better experience in one revamped portal','Achieved','A better experience for B2B customers: dashboard, repair requests, order and device management, settings, user management and a user activity report.','Customer Portal, new features'],
-      ['Every release is protected before it reaches customers','In progress','Automated testing protects every release before it reaches customers.','Automation Testing portal'],
-      ['A new growth channel: B2B clients register themselves','Upcoming','New B2B clients get started without manual effort.','B2B Self Registration'],
-      ['Customers adopt the portal as their everyday tool','Upcoming','70% of registered customers use the portal regularly.','Rollout and adoption']
+      ['B2B customers get a better experience in one revamped portal','Achieved','A better experience for B2B customers: dashboard, repair requests, order and device management, settings, user management and a user activity report.','Customer Portal, new features',[['Done','SELISE','Delivered the dashboard, repair requests, order and device management, settings, user management and user activity report to all users.'],['To do','Service 7000','Decide on the Order Chat release. It is delivered, but only shown as a demo to internal teams.']]],
+      ['Every release is protected before it reaches customers','In progress','Automated testing protects every release before it reaches customers.','Automation Testing portal',[['In progress','SELISE','Automation Testing portal in progress, with most test cases automated. Remaining work: fix the failed test cases and automate the rest.'],['To do','Service 7000','Deploy the Automation Testing portal on the Service 7000 side once SELISE delivers it.']]],
+      ['A new growth channel: B2B clients register themselves','Upcoming','New B2B clients get started without manual effort.','B2B Self Registration',[['Done','SELISE','Built the invitation email template and solved the blocking dependencies. SELISE has completed its part.'],['To do','Service 7000','Define the trigger events for self-registration and send the invitation emails from their existing sender setup.']]],
+      ['Customers adopt the portal as their everyday tool','Upcoming','Most registered customers use the portal regularly.','Rollout and adoption',[['Done','SELISE','Portal is live, and many registered customers are already active users.'],['To do','SELISE and Service 7000','Drive adoption so that most registered customers use the portal regularly.']]]
     ],
-    testing:{note:'Results from the Automation Testing portal, which tests the Customer Portal. Skipped cases did not run because a test they depend on failed.', tiles:[['Test cases','67'],['Automated','70%'],['Passed','57'],['Failed','6'],['Skipped (dependency)','4'],['Pass rate, last run','85.07%'],['Critical defects','0']]},
+    testing:{note:'', tiles:[['Test cases','67'],['Automated','70%'],['Passed','57'],['Failed','6'],['Skipped (dependency)','4'],['Pass rate, last run','85.07%'],['Critical defects','0']]},
     blockers:[
-      ['B2B Self Registration: event triggering to be crosschecked with Service 7000','Needed before the invitation email can be sent','Service 7000','Open']
+      ['Order Chat integration: release decision pending','Delivered and being demoed to internal teams; cannot be released until Service 7000 decides','Service 7000','Open',[0]]
     ],
     actions:[
-      ['Confirm trigger events for self-registration','Service 7000','Open']
+      ['Decide on the release of the Order Chat integration','Service 7000','Open']
     ],
     decisions:[
       ['Add new features during the rollout','Requested by the business; delivered together to avoid a second release','Approved'],
@@ -593,14 +646,15 @@ const PROJ = {
     owners:[['SELISE','Product Manager'],['Client','Business lead']],
     summary:'S7000 Akademie is a new project. The team is working on proof of concept and R&D for a knowledge base with semantic (RAG) retrieval, a technician chat and sales arguments.',
     milestones:[
-      ['Technicians get easy access to high-quality support during repair jobs','','A technician chat based on Service 7000 internal expert knowledge.','Technician chat'],
-      ['Technicians are prepared for their next assignment','','An LLM-driven audio briefing system for technicians preparing for their next assignment.','Audio briefing system'],
-      ['Sales gets fast arguments in plain language','','Automated argument support for sales: easy to access, fast and in plain language.','Sales argument support'],
-      ['Work preparation is automated','','Automation of work preparation.','Work preparation automation'],
-      ['Anyone can find answers without a technical background','','Queries via semantic search, with no technical background needed.','Semantic search']
+      ['Technicians get easy access to high-quality support during repair jobs','','A technician chat based on Service 7000 internal expert knowledge.','Technician chat',[['In progress','SELISE','Proof of concept and R&D started for the technician chat.'],['To do','Service 7000','Decide on the hosted server, RAG model and embedding model, and share the RS Line knowledge.']]],
+      ['Technicians are prepared for their next assignment','','An LLM-driven audio briefing system for technicians preparing for their next assignment.','Audio briefing system',[['To do','SELISE','Design the audio briefing system as part of the proof of concept.'],['To do','Service 7000','Share the knowledge the briefings are based on.']]],
+      ['Sales gets fast arguments in plain language','','Automated argument support for sales: easy to access, fast and in plain language.','Sales argument support',[['To do','SELISE','Build sales arguments on top of the knowledge base.'],['To do','Service 7000','Share the RS Line knowledge for the arguments.']]],
+      ['Work preparation is automated','','Automation of work preparation.','Work preparation automation',[['To do','SELISE','Define how work preparation can be automated using the knowledge base.'],['To do','Service 7000','Describe the current work preparation steps.']]],
+      ['Anyone can find answers without a technical background','','Queries via semantic search, with no technical background needed.','Semantic search',[['To do','SELISE','Proof of concept and R&D for semantic (RAG) retrieval.'],['To do','Service 7000','Decide on the RAG and embedding model.']]]
     ],
     blockers:[
-      ['Hosted server, RAG model and embedding model are not yet decided','Needed before the knowledge base and chat can be built','Service 7000','Open']
+      ['Hosted server, RAG model and embedding model are not yet decided','Needed before the knowledge base and chat can be built','Service 7000','Open',[0,4]],
+      ['RS Line knowledge for S7000 Akademie is not yet shared','The real implementation cannot be done without it','Service 7000','Open',[0,2]]
     ],
     actions:[
       ['Decide on the hosted server, RAG model and embedding model','Service 7000','Open'],
@@ -618,7 +672,54 @@ function tbl(heads, rows){
   return `<div class="scroll"><table class="tb"><thead><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
 }
 const MSC = {'Achieved':'live','In progress':'test','Upcoming':'plan'};
-const msHtml = ms => `<ol class="ms">${ms.map((m,i)=>`<li class="mil"><div class="mtop"><span class="msd">${i+1}</span></div><b>${m[0]}</b><p>${m[2]}</p><small>Solved through: ${m[3]}</small></li>`).join('')}</ol>`;
+let GOALS = [];
+const goalSum = acts => { // short summary of what is done: the first sentence of each Done action point
+  const pick = acts.some(a=>a[0]==='Done') ? 'Done' : 'In progress'; // fall back to work in progress when nothing is done yet
+  const done = acts.filter(a=>a[0]===pick).map(a=>{ const s=String(a[2]); const i=s.indexOf('. '); return i>0 ? s.slice(0,i+1) : s; });
+  if(done.length) return `<span style="font-size:13.5px">${done.map(esc).join(' ')}</span>`;
+  return `<span style="font-size:13.5px;color:var(--muted)">Nothing done yet</span>`; // nothing done or in progress yet
+};
+const msHtml = ms => { GOALS = ms; return `<div class="scroll"><table class="tb"><thead><tr><th>Goal</th><th>Summary</th></tr></thead><tbody>${ms.map((m,i)=>{ const on = (m[4]||[]).some(a=>a[0]==='Done'||a[0]==='In progress'); // goals with nothing done yet are inactive: no details panel
+    return on ? `<tr class="goalrow" data-goal="${i}" tabindex="0" role="button" aria-label="Open details: ${esc(m[0])}"><td><b>${i+1}. ${m[0]}</b></td><td><div class="gsum">${goalSum(m[4])}<span class="gmore">Details &rarr;</span></div></td></tr>`
+      : `<tr><td><b>${i+1}. ${m[0]}</b></td><td><div class="gsum">${goalSum(m[4])}<span class="gmore" aria-disabled="true" style="color:var(--muted);opacity:.5;cursor:not-allowed">Details &rarr;</span></div></td></tr>`; }).join('')}</tbody></table></div>`; };
+function ensureDrawer(){
+  if($('#goalDrawer')) return;
+  document.body.insertAdjacentHTML('beforeend', `<div class="dwscrim" id="dwScrim"></div><aside class="drawer" id="goalDrawer" role="dialog" aria-modal="true" aria-labelledby="dwTitle" aria-hidden="true"><header><h2 id="dwTitle"></h2><button class="cbtn" id="dwComment" hidden>Comment</button><button class="dx" id="dwClose" aria-label="Close details">&times;</button></header><div class="dbody" id="dwBody"></div></aside>`);
+  window.addEventListener('hashchange', closeGoal);
+  $('#dwComment').onclick = async ()=>{ try{ await CM.openComposer({element:$('#goalDrawer')}); }catch(e){ $('#dwComment').textContent='Comments off'; $('#dwComment').disabled=true; } };
+  $('#dwScrim').onclick = closeGoal; $('#dwClose').onclick = closeGoal;
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && $('#goalDrawer').classList.contains('on')) closeGoal(); });
+}
+let dwFrom = null;
+function openGoal(i, from){
+  const m = GOALS[i]; if(!m) return;
+  openDrawer(`${+i+1}. ${m[0]}`, `<p class="dlab">Solved through: ${m[3]}</p><p class="dlab" style="margin-top:4px">Actions (${m[4].length})</p>` + m[4].map(u=>`<div class="dact"><div style="display:flex;gap:8px;align-items:center">${chipSt(u[0])}<span class="dwho">${u[1]}</span></div><p>${u[2]}</p></div>`).join(''), from);
+}
+function openStep(i, from){
+  const s = COLLAB.sdd[i]; if(!s) return;
+  openDrawer(`${+i+1}. ${s[0]}`, `<p class="dlab">${s[3]}</p><p style="margin:0;font-size:14px">${s[1]}</p>` + s[4].map(b=>`<div class="dact"><span class="dwho">${b[0]}</span><ul class="cl">${b[1].map(x=>`<li>${x}</li>`).join('')}</ul></div>`).join(''), from);
+}
+function openDrawer(title, body, from){
+  ensureDrawer(); dwFrom = from || null;
+  $('#dwTitle').textContent = title;
+  $('#dwBody').innerHTML = body;
+  $('#goalDrawer').classList.add('on'); $('#goalDrawer').setAttribute('aria-hidden','false'); $('#dwScrim').classList.add('on');
+  $('#dwComment').hidden = !CM;
+  $('#dwClose').focus();
+}
+function closeGoal(){
+  const d=$('#goalDrawer'); if(!d) return;
+  d.classList.remove('on'); d.setAttribute('aria-hidden','true'); $('#dwScrim').classList.remove('on');
+  if(dwFrom) dwFrom.focus();
+}
+document.addEventListener('click', e=>{ const r=e.target.closest('.goalrow'); if(r) return openGoal(r.dataset.goal, r); const t=e.target.closest('.sddrow'); if(t) openStep(t.dataset.step, t); });
+document.addEventListener('keydown', e=>{ if((e.key==='Enter'||e.key===' ') && e.target.classList){ const c=e.target.classList; if(c.contains('goalrow')){ e.preventDefault(); openGoal(e.target.dataset.goal, e.target); } else if(c.contains('sddrow')){ e.preventDefault(); openStep(e.target.dataset.step, e.target); } } });
+const blkTbl = bl => {
+  const has = bl.some(b=>b[4]);
+  const act = i => (GOALS[i][4]||[]).some(a=>a[0]==='Done'||a[0]==='In progress');
+  const gl = b => (b[4]||[]).map(i=> act(i) ? `<span class="goalrow glink" data-goal="${i}" tabindex="0" role="button">${i+1}. ${GOALS[i][0]}</span>` : `<span style="display:block;margin-bottom:4px">${i+1}. ${GOALS[i][0]}</span>`).join('') || '&ndash;';
+  return tbl(['Blocker',...(has?['Goal']:[]),'Impact','Owner','Status'], bl.map(b=>[b[0],...(has?[gl(b)]:[]),b[1],b[2],chipSt(b[3])]));
+};
 function progHtml(ms){
   const n=ms.length, a=ms.filter(m=>m[1]==='Achieved').length, ip=ms.filter(m=>m[1]==='In progress').length, up=n-a-ip;
   const pct=Math.round(a/n*100);
@@ -635,29 +736,47 @@ function renderProject(id){
   const kv = rows => rows.map(r=>`<div class="kv2"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('');
   $('#viewProject').innerHTML =
     `<div class="card pheader"><a class="back" href="#overview">&larr; All projects</a>
-      <div class="phrow"><h1>${p.name}</h1><span class="hp ${p.health[0]}">${p.health[1]}</span></div>
+      <div class="phrow"><h1>${p.name}</h1>${p.health && p.health[1]!=='On track' ? `<span class="hp ${p.health[0]}">${p.health[1]}</span>` : ''}</div>
       <p class="lead">${p.summary}</p>
       <div class="meta"><span>Phase: <b>${p.phase}</b></span><span>Collaboration: <b>SELISE X Service 7000</b></span></div>
     </div>`
-    + sec('Business goals','', msHtml(p.milestones), false)
-    + (p.testing ? sec('Testing facts', p.testing.note, `<div class="tiles">${p.testing.tiles.map(t=>`<div class="tile"><div class="n">${t[1]}</div><div class="l">${t[0]}</div></div>`).join('')}</div>`, false) : '')
+    + sec('Goals','', msHtml(p.milestones), false)
     + `<div class="pgrid">`
-    + sec('Blockers','', p.blockers.length ? tbl(['Blocker','Impact','Owner','Status'], p.blockers.map(b=>[b[0],b[1],b[2],chipSt(b[3])])) : '<p style="margin:0;color:var(--muted);text-align:center;padding:10px 0">No blockers at the moment.</p>', false)
+    + sec('Blockers','', p.blockers.length ? blkTbl(p.blockers) : '<p style="margin:0;color:var(--muted);text-align:center;padding:10px 0">No blockers at the moment.</p>', false)
     + sec('Action points','', tbl(['Action','Owner','Status'], p.actions.map(a=>[a[0],a[1],chipSt(a[2])])), false)
     + `</div>`;
   wireComments();
 }
 // Commenting: opens the viewer's comment composer on a section (author is added by the platform)
 let CM = null;
+// Every section gets a Comment button (added here so no page needs its own markup). Threads are shared:
+// anyone who can open the artifact sees them in the comment panel and as pins on the section.
+// Add a selector here to make another block commentable.
+const CM_HOSTS ='#viewOverview .head, #health, #hdecide .psec, #hrisks .psec, .main .psec, .main .pheader';
+function addCommentButtons(){
+  document.querySelectorAll(CM_HOSTS).forEach(host=>{
+    if(host.querySelector(':scope > .cbtn, :scope > .ph2 .cbtn, :scope > .phrow .cbtn, :scope > .tools .cbtn, :scope > .cbar .cbtn')) return;
+    host.setAttribute('data-comment-target','');
+    const b = document.createElement('button');
+    b.type='button'; b.className='cbtn cauto'; b.textContent='Comment'; b.title='Comment on this section';
+    const row = host.matches('.psec') ? host.querySelector(':scope > .ph2 .pact')
+      : host.matches('.pheader') ? host.querySelector(':scope > .phrow')
+      : host.matches('.head') ? host.querySelector(':scope > .tools')
+      : null;
+    if(row){ if(host.matches('.pheader')) b.style.marginLeft='auto'; row.appendChild(b); }
+    else { const bar = document.createElement('div'); bar.className='cbar'; bar.appendChild(b); host.insertBefore(bar, host.firstChild.nextSibling || null); }
+  });
+}
 function wireComments(){
+  addCommentButtons();
   const h = document.getElementById('cmHint'); if(h) h.hidden = !CM;
   const tip = document.getElementById('cmTip'); if(tip) tip.hidden = !CM;
-  const mb = document.getElementById('cmMain');
-  if(mb){ mb.hidden = !CM; mb.onclick = async ()=>{ try{ await CM.openComposer({element:document.getElementById('viewOverview')}); }catch(e){ mb.textContent='Comments off'; mb.disabled=true; } }; }
   document.querySelectorAll('.cbtn').forEach(b=>{
     b.hidden = !CM;
+    if(b.id==='dwComment') return;
     b.onclick = async ()=>{
-      try{ await CM.openComposer({element:b.closest('.psec')}); }
+      const el = b.closest('.psec, .pheader, #health, .head') || b.parentElement;
+      try{ await CM.openComposer({element:el}); }
       catch(e){ b.textContent='Comments off'; b.disabled=true; }
     };
   });
@@ -674,27 +793,24 @@ const COLLAB = {
     ['Visible','Requests sit on the same board and stages as the rest of the portfolio.']
   ],
   shapes:[
-    ['AI proof of concept','A quick test of whether an AI idea works, before committing to build it.','3 to 10 days'],
+    ['Proof of concept','A quick test of whether an idea works, before committing to build it.','3 to 10 days'],
     ['Work package','Use when there is a clear, separable slice of an internal project.','10 to 30 days'],
     ['Embedded pairing','Use when the Service 7000 team needs extra hands or a specific skill for a while.','1 to 2 sprints'],
     ['Review and advisory','Use for an architecture, quality or AI output check.','2 to 5 days']
   ],
   flow:[
-    ['Intake','Service 7000 raises a request on the board.','Service 7000'],
-    ['Write the spec','Problem, outcome and acceptance criteria are written down by SELISE and reviewed by Service 7000. Short for small slices, longer when needed.','SELISE and Service 7000'],
-    ['Estimate','Effort is estimated in days.','SELISE'],
-    ['Agree scope','The Service 7000 owner approves scope and capacity.','Service 7000'],
-    ['Build','Follows the spec, with AI assistance and human review.','SELISE'],
-    ['Review','Acceptance criteria are checked together.','Both teams'],
-    ['Handover','The slice is merged, documented and the card moves to Live.','Both teams']
+    ['Share the business objective','Service 7000 shares what it wants to achieve and why.','Service 7000'],
+    ['Discuss and collaborate','Both teams shape the approach together, as one fusion team.','Both teams'],
+    ['Build and implement','The work is built and implemented.','SELISE'],
+    ['Weekly sync','Progress, decisions and next steps are reviewed in the weekly sync call.','Both teams']
   ],
   sddWhy:['Everyone builds the same thing: both teams and the AI agent work from one written source.','Less rework: gaps and edge cases surface before building, not after.','Easy handover: either team can pick up a slice.','Traceable: every change links back to a spec ID on the board.'],
   sdd:[
-    ['Define the requirements','What problem are we solving?','h','Both teams'],
-    ['Write the specification','User stories, business rules, edge cases and acceptance criteria.','h','SELISE writes, Service 7000 reviews'],
-    ['Create an implementation plan','Architecture, tasks, files and dependencies.','b','AI drafts, both teams approve'],
-    ['Implement with AI','An AI coding agent writes or modifies the code.','ai','AI agent, reviewed by people'],
-    ['Validate against the spec','Automated tests, acceptance checks and review.','b','Automated tests and people']
+    ['Define the requirements','What problem are we solving?','h','Both teams',[['What happens',['Service 7000 and SELISE agree the problem and the outcome together.','Who is affected, and what should be true when this is done?']],['Output',['A short problem and outcome statement on the board card.']]]],
+    ['Write the specification','User stories, business rules, edge cases and acceptance criteria.','h','SELISE writes, Service 7000 reviews',[['What happens',['SELISE writes the spec using the spec fields: problem, outcome, expected behavior, acceptance criteria, interfaces, constraints, test cases and out of scope.','Service 7000 reviews it and asks for changes until it is clear.']],['Output',['An approved spec with a spec ID that the board card links to.']]]],
+    ['Create an implementation plan','Architecture, tasks, files and dependencies.','b','AI drafts, both teams approve',[['What happens',['The AI drafts a plan from the approved spec: architecture, tasks, files and dependencies.','Both teams check the plan and approve it before any code is written.']],['Output',['An approved implementation plan linked to the spec ID.']]]],
+    ['Implement with AI','An AI coding agent writes or modifies the code.','ai','AI agent, reviewed by a human',[['What happens',['The AI coding agent builds the slice by following the spec and the plan.','A human reviews the code. AI-generated code gets the same review as any other code.']],['Guardrails',['No customer personal data in prompts.','Approved tools only.']],['Output',['Reviewed code that is ready to be checked against the spec.']]]],
+    ['Validate against the spec','Automated tests, acceptance checks and review.','b','Automated tests and human review',[['What happens',['Automated tests and acceptance checks run against the acceptance criteria in the spec.','Both teams review the result together.']],['Done when',['All acceptance criteria pass.','Reviewed by both teams and signed off by the Service 7000 owner.','Documented and linked to its spec ID.']],['If requirements change',['Go back to step 2 and update the spec first, then repeat.']]]]
   ],
   spec:[
     ['Problem','What is not working or missing today?'],
@@ -726,7 +842,7 @@ const COLLAB = {
   ],
   decisions:[
     ['Agree a quarterly capacity in days for internal projects','Lets both teams plan ahead','Service 7000'],
-    ['Choose one or two slices for the pilot','Gives evidence before scaling','Service 7000 and SELISE']
+    ['Choose one or two internal projects to start with as a pilot','Gives evidence before scaling','Service 7000 and SELISE']
   ],
   aiDecisions:[
     ['Agree a monthly AI session for both teams','Keeps knowledge and practices in sync','Both teams'],
@@ -734,8 +850,8 @@ const COLLAB = {
   ]
 };
 function sddFlow(C){
-  const steps = C.sdd.map((s,i)=>`<li><div class="st ${s[2]}"><span class="no">${i+1}</span><div><b>${s[0]}</b><span class="d">${s[1]}</span><span class="tg ${s[2]}">${s[3]}</span></div></div></li>`).join('');
-  return `<div class="sddwrap"><ol class="sdd" aria-label="Spec-driven development flow">${steps}</ol><div class="sddloop">&#8635; When requirements change, go back to step 2 and update the spec first, then repeat.</div><div class="fkey" style="justify-content:center"><span><i style="background:var(--live)"></i>People</span><span><i style="background:var(--test)"></i>AI</span><span><i style="background:var(--primary)"></i>People and automation</span></div></div>`;
+  const steps = C.sdd.map((s,i)=>`<li><div class="st ${s[2]} sddrow" data-step="${i}" tabindex="0" role="button" aria-label="Open details: ${esc(s[0])}"><span class="no">${i+1}</span><div><b>${s[0]}</b><span class="d">${s[1]}</span><span class="tg ${s[2]}">${s[3]}</span><span class="gmore" style="display:block;margin-top:6px">Details &rarr;</span></div></div></li>`).join('');
+  return `<div class="sddwrap"><ol class="sdd" aria-label="Spec-driven development flow">${steps}</ol><div class="sddloop">&#8635; When requirements change, go back to step 2 and update the spec first, then repeat.</div><div class="fkey" style="justify-content:center"><span><i style="background:var(--live)"></i>Human</span><span><i style="background:var(--test)"></i>AI</span><span><i style="background:var(--primary)"></i>Human and automation</span></div></div>`;
 }
 function renderCollab(kind){
   const C = COLLAB, D = false; // set D = 'Dummy data' to show the tag on placeholder cards again
@@ -748,18 +864,17 @@ function renderCollab(kind){
     </div>`;
   const dec = rows => sec('Decisions needed from the steering board','', tbl(['Decision needed','Why it matters','Owner'], rows.map(d=>[d[0],d[1],d[2]])), false);
   const work = [
-    head('Working together on internal projects', C.lead, ['#ai','Collaboration with AI']),
+    head('Ad hoc Support', C.lead, ['#ai','Collaboration with AI']),
     `<div class="banner">Partial work, fully shared. <span>One predictable way of working, from request to handover.</span></div>`,
-    sec('Ways to work together','Four shapes of partial work. Pick the one that fits the request.', `<div class="objs">${C.shapes.map(s=>`<div class="obj"><b>${s[0]}</b><p style="margin:0;font-size:13.5px;color:var(--muted)">${s[1]}</p><span class="chipst plan">Typical size: ${s[2]}</span></div>`).join('')}</div>`, D),
-    sec('How a request flows','From idea to handover in seven steps.', `<ol class="ms">${C.flow.map((s,i)=>`<li class="mil"><div class="mtop"><span class="msd">${i+1}</span></div><b>${s[0]}</b><p>${s[1]}</p><small>Owner: ${s[2]}</small></li>`).join('')}</ol>`, false),
+    sec('Work pipeline','', `<ol class="ms">${C.flow.map((s,i)=>`<li class="mil"><div class="mtop"><span class="msd">${i+1}</span></div><b>${s[0]}</b><p>${s[1]}</p><small>Owner: ${s[2]}</small></li>`).join('')}</ol>`, false),
     sec('Roles','Who does what for each request.', `<div class="scroll"><table class="tb raci"><thead><tr><th>Activity</th><th>Service 7000 owner</th><th>Service 7000 team</th><th>SELISE product manager</th><th>SELISE tech lead</th></tr></thead><tbody>${C.raci.map(r=>`<tr><td>${r[0]}</td>${r.slice(1).map(c=>`<td>${rb(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div><p class="hint">R responsible, A accountable, C consulted, I informed.</p>`, 'Proposed'),
     dec(C.decisions)
   ].join('');
   const aiHtml = [
-    head('Collaboration with AI', C.aiLead, ['#collab','Working together']),
+    head('Collaboration with AI', C.aiLead, ['#collab','Ad hoc Support']),
     `<div class="banner">Spec first. AI builds. People decide. <span>One shared way to use AI on every slice of work.</span></div>`,
     sec('Spec-driven development (SDD)','Define what the software should do before anyone, human or AI, builds it. The spec is the shared source of truth between both teams, the AI coding agent and the codebase.', `<div class="sddgrid">` + sddFlow(C) + `<div class="sddr"><h3 class="subh">What goes in the spec</h3>` + tbl(['Spec field','What it answers'], C.spec.map(f=>[`<b>${f[0]}</b>`, f[1]])) + `<div class="nnl"><div class="nn now"><h3>Definition of ready</h3>${ul(C.ready)}</div><div class="nn next"><h3>Definition of done</h3>${ul(C.done)}</div></div><div class="nn later"><h3>Why spec first</h3>${ul(C.sddWhy)}</div></div></div>`, false),
-    sec('AI in the loop','AI does the heavy lifting. People decide at every checkpoint.', `<div class="fl">${C.aiSteps.map((s,i)=>`${i?'<span class="ar">&rarr;</span>':''}<span class="fs ${s[1]}">${s[0]}</span>`).join('')}</div><div class="fkey"><span><i style="background:var(--live)"></i>Human checkpoint</span><span><i style="background:var(--test)"></i>AI-assisted step</span></div>`, false),
+    sec('Human in the loop','People stay in control at every checkpoint. AI supports the work in between.', `<div class="fl">${C.aiSteps.map((s,i)=>`${i?'<span class="ar">&rarr;</span>':''}<span class="fs ${s[1]}">${s[0]}</span>`).join('')}</div><div class="fkey"><span><i style="background:var(--live)"></i>Human checkpoint</span><span><i style="background:var(--test)"></i>AI-assisted step</span></div>`, false),
     `<div class="pgrid">`,
     sec('Shared assets','What both teams use, so AI output stays consistent.', ul(C.assets), false),
     sec('Guardrails','What AI tools may and may not do.', ul(C.guardrails), false),
@@ -773,15 +888,133 @@ function renderCollab(kind){
   $('#viewCollab').innerHTML = kind==='ai' ? aiHtml : work;
   wireComments();
 }
+// ---- Meeting minutes (add each weekly call at the top of MINUTES; prev = id of the earlier call it follows up) ----
+// Notes may contain links to other calls, for example <a href="#minutes/118">call 118</a>.
+const MINUTES = [
+  { id:119, date:'2026-10-14', title:'SELISE X Service 7000: Weekly sync call 119', prev:null,
+    s7000:['Marco Cathomas','Michael Pfenninger','Yannic Schneiter','Mladen Markovic'],
+    selise:['Ruhul Amin','Abu Sufian','Dipu Mohanto','Shayekh Ebne Mizan'],
+    items:[
+      {t:'Customer Portal (Repair Reports Creation Enhancement on production)', who:'Shayekh', st:'Open', notes:['Toggle will be deployed today','Self-Registration Process (B2B) needs to be implemented']},
+      {t:'SAM Rollout Expedite', who:'Shayekh', st:'Open', notes:['End of October','Health is fine now']},
+      {t:'Internal Projects Contribution', who:'Shayekh', st:'Open', notes:['Michel is responsible for further details']},
+      {t:'AOB', who:'Shayekh', notes:[]}
+    ]},
+  // SAMPLE call, only to show how links to the previous call look. Delete it when real call 120 is added.
+  { id:120, date:'2026-10-21', title:'SELISE X Service 7000: Weekly sync call 120', prev:119, sample:true,
+    s7000:['Marco Cathomas','Michael Pfenninger','Yannic Schneiter','Mladen Markovic'],
+    selise:['Ruhul Amin','Abu Sufian','Dipu Mohanto','Shayekh Ebne Mizan'],
+    items:[
+      {t:'Customer Portal (Repair Reports Creation Enhancement on production)', who:'Shayekh', from:[119,0], st:'Done', notes:['Toggle is live on production','Self-Registration Process (B2B): design started']},
+      {t:'SAM Rollout Expedite', who:'Shayekh', from:[119,1], st:'Done', notes:['Rollout finished','Health is fine']}
+    ]}
+];
+const MF = {year:'', week:'', q:''};
+const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function isoWeek(s){
+  const d = new Date(s+'T00:00:00Z'), day = d.getUTCDay()||7;
+  d.setUTCDate(d.getUTCDate()+4-day);
+  const y = d.getUTCFullYear();
+  return {y, w: Math.ceil(((d-Date.UTC(y,0,1))/864e5+1)/7)};
+}
+const mDate = s => { const [y,m,d] = s.split('-'); return `${+d} ${MON[m-1]} ${y}`; };
+MINUTES.forEach(m=>{ const k = isoWeek(m.date); m.y = k.y; m.w = k.w; });
+const byId = id => MINUTES.find(m=>m.id===+id);
+const mLink = m => `<a href="#minutes/${m.id}">Call ${m.id}</a>`;
+function minutesMatch(m){
+  if(MF.year && m.y!==+MF.year) return false;
+  if(MF.week && m.w!==+MF.week) return false;
+  const q = MF.q.trim().toLowerCase();
+  if(!q) return true;
+  return [m.title, ...m.s7000, ...m.selise, ...m.items.flatMap(i=>[i.t, i.who, ...i.notes])].join(' ').toLowerCase().includes(q);
+}
+function minutesList(){
+  const ready = MF.year && MF.week;
+  const rows = ready ? MINUTES.filter(minutesMatch) : [];
+  $('#mResults').innerHTML = rows.length ? rows.map(m=>callHtml(m, true)).join('') : `<div class="card empty">${ready ? `No call in week ${MF.week}, ${MF.year}.` : 'Select a year and a week to see the minutes.'}</div>`;
+  $('#mCount').textContent = '';
+  wireComments();
+}
+function weekOptions(){
+  const y = MF.year ? +MF.year : null;
+  const max = y ? isoWeek(`${y}-12-28`).w : 53;
+  let o = `<option value="">Select week</option>`;
+  for(let w=1; w<=max; w++){
+    const n = MINUTES.filter(m=>m.w===w && (!y || m.y===y)).length;
+    o += `<option value="${w}"${+MF.week===w?' selected':''}>Week ${w}${n?` (${n} ${n>1?'calls':'call'})`:''}</option>`;
+  }
+  return o;
+}
+function renderMinutesIndex(){
+  const years = [...new Set(MINUTES.map(m=>m.y))].sort((a,b)=>b-a);
+  const filter = `<div class="mfilter">
+    <label>Year<select id="mYear"><option value="">Select year</option>${years.map(y=>`<option value="${y}"${+MF.year===y?' selected':''}>${y}</option>`).join('')}</select></label>
+    <label>Week<select id="mWeek"${MF.year?'':' disabled'}>${weekOptions()}</select></label>
+    <span class="hint" id="mCount" style="margin:0 0 8px"></span>
+  </div>`;
+  $('#viewMinutes').innerHTML = [
+    `<div class="card pheader"><a class="back" href="#overview">&larr; Overview</a><div class="phrow"><h1>Meeting minutes</h1></div><p class="lead">Minutes of the weekly SELISE X Service 7000 sync call. Select a year and a week to see that week's minutes.</p></div>`,
+    sec('Filter', 'Weeks follow ISO numbering (Monday to Sunday).', filter, false),
+    `<div id="mResults"></div>`
+  ].join('');
+  minutesList();
+  const upd = () => { $('#mWeek').innerHTML = weekOptions(); $('#mWeek').disabled = !MF.year; minutesList(); };
+  $('#mYear').onchange = e => { MF.year = e.target.value; MF.week = ''; upd(); };
+  $('#mWeek').onchange = e => { MF.week = e.target.value; minutesList(); };
+}
+const stChip = x => x ? `<span class="chipst ${SC[x]||'plan'}">${x}</span>` : '';
+function itemCell(m, i, n){
+  const f = i.from && byId(i.from[0]), fi = f && f.items[i.from[1]];
+  const back = f && fi ? `<a class="dep" href="#minutes/${f.id}">&larr; Continues from call ${f.id}: ${esc(fi.t)}</a>` : '';
+  const nx = MINUTES.filter(x=>x.items.some(j=>j.from && j.from[0]===m.id && j.from[1]===n));
+  const fwd = nx.map(x=>`<a class="dep" href="#minutes/${x.id}">Followed up in call ${x.id} &rarr;</a>`).join('');
+  return `<b>${esc(i.t)}</b>${i.st?` ${stChip(i.st)}`:''}${back}${fwd}`;
+}
+function callHtml(m, inList){
+  const prev = m.prev && byId(m.prev), nexts = MINUTES.filter(x=>x.prev===m.id);
+  const dow = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'][new Date(m.date+'T00:00:00Z').getUTCDay()];
+  const ul = a => a.length ? `<ul class="cl">${a.map(x=>`<li>${x}</li>`).join('')}</ul>` : `<span class="tbc">No notes</span>`;
+  const people = a => `<ul class="cl">${a.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
+  const prevTxt = prev ? `<a href="#minutes/${prev.id}">Call ${prev.id}, ${mDate(prev.date)} &rarr;</a>` : 'None added yet';
+  const nextTxt = nexts.length ? nexts.map(n=>`<a href="#minutes/${n.id}">Call ${n.id} &rarr;</a>`).join(', ') : 'Not held yet';
+  return [
+    `<div class="card pheader">${inList?'':'<a class="back" href="#minutes">&larr; All meeting minutes</a>'}<div class="phrow"><h1${inList?' style="font-size:22px"':''}>${esc(m.title)}</h1><span class="chipst test">Week ${m.w}, ${m.y}</span>${m.sample?'<span class="sample">Sample data</span>':''}</div>
+      <div class="meta"><span>Date: <b>${dow}, ${mDate(m.date)}</b></span><span>Follows: <b>${prevTxt}</b></span><span>Followed by: <b>${nextTxt}</b></span></div></div>`,
+    sec('Attendees','', `<div class="meta" style="margin-top:0;font-size:14px"><span>Service 7000: <b>${m.s7000.map(esc).join(', ')}</b></span><span>SELISE: <b>${m.selise.map(esc).join(', ')}</b></span></div>`, false),
+    sec('Meeting minutes','', tbl(['Item','Presenter','Notes'], m.items.map((i,n)=>[itemCell(m,i,n), esc(i.who), ul(i.notes)])), false),
+    prev ? openFromPrev(m, prev) : '',
+    inList ? '' : `<div class="card mnav">${prev?`<a href="#minutes/${prev.id}">&larr; Previous call ${prev.id}</a>`:`<span class="off">No previous call added</span>`}${nexts.length?`<a href="#minutes/${nexts[0].id}">Next call ${nexts[0].id} &rarr;</a>`:`<span class="off">No next call yet</span>`}</div>`
+  ].join('');
+}
+function openFromPrev(m, prev){
+  const left = prev.items.filter((i,n)=>i.st && i.st!=='Done' && !m.items.some(j=>j.from && j.from[0]===prev.id && j.from[1]===n));
+  if(!left.length) return '';
+  return sec(`Not yet followed up from call ${prev.id}`,'Open topics from the previous call that are not on this call.', ul0(left.map(i=>`<a href="#minutes/${prev.id}">${esc(i.t)}</a> ${stChip(i.st)}`)), false);
+}
+const ul0 = a => `<ul class="cl">${a.map(x=>`<li>${x}</li>`).join('')}</ul>`;
+function renderMinutes(){
+  const m = location.hash.match(/^#minutes\/(\d+)$/);
+  const c = m && byId(m[1]);
+  if(c){ MF.year = String(c.y); MF.week = String(c.w); }
+  else if(!MF.year && MINUTES.length){ // default: the week of the most recent call
+    const last = [...MINUTES].sort((a,b)=>b.date.localeCompare(a.date))[0];
+    MF.year = String(last.y); MF.week = String(last.w);
+  }
+  renderMinutesIndex();
+  wireComments();
+}
 function route(){
   const m = location.hash.match(/^#p\/(\w+)/);
-  const ov = $('#viewOverview'), pv = $('#viewProject'), cv = $('#viewCollab');
+  const ov = $('#viewOverview'), pv = $('#viewProject'), cv = $('#viewCollab'), mv = $('#viewMinutes');
   const isC = location.hash === '#collab' || location.hash === '#ai';
+  const isM = /^#minutes(\/\d+)?$/.test(location.hash);
   cv.hidden = !isC;
+  mv.hidden = !isM;
   const navs = [...document.querySelectorAll('.nav a')];
-  const hit = navs.find(a=>a.getAttribute('href')===location.hash);
+  const hit = isM ? navs.find(a=>a.getAttribute('href')==='#minutes') : navs.find(a=>a.getAttribute('href')===location.hash);
   navs.forEach(a=>a.classList.toggle('on', hit ? a===hit : a.getAttribute('href')==='#overview'));
-  if(isC){ ov.hidden=true; pv.hidden=true; renderCollab(location.hash==='#ai'?'ai':'work'); window.scrollTo(0,0); }
+  if(isM){ ov.hidden=true; pv.hidden=true; renderMinutes(); window.scrollTo(0,0); }
+  else if(isC){ ov.hidden=true; pv.hidden=true; renderCollab(location.hash==='#ai'?'ai':'work'); window.scrollTo(0,0); }
   else if(m && Object.prototype.hasOwnProperty.call(PROJ, m[1])){ ov.hidden=true; pv.hidden=false; renderProject(m[1]); window.scrollTo(0,0); }
   else if(m && isSimple(m[1])){ ov.hidden=true; pv.hidden=false; renderSimple(m[1]); window.scrollTo(0,0); }
   else {
@@ -794,6 +1027,7 @@ function route(){
 // ---- Homepage: decisions and risks (sample data, edit here) ----
 const HOME = {
   decisions:[
+    ['Decide on the release of the Order Chat integration','It is delivered and being demoed to internal teams; release is on hold until this decision','Service 7000','Customer Portal'],
     ['Decide on the hosted server, RAG model and embedding model','Needed before the knowledge base and chat can be built','Service 7000','S7000 Akademie']
   ],
   risks:[
@@ -806,7 +1040,7 @@ function homeExtras(){
   $('#hdecide').innerHTML = sec('Decisions needed from the client','', tbl(['Decision needed','Why it matters','Owner'], HOME.decisions.map(d=>[`${d[0]}<br><span class="chipst test" style="display:inline-block;margin-top:6px">${d[3]}</span>`, d[1], d[2]])), false);
   $('#hrisks').innerHTML = sec('Top risks and blockers','', tbl(['Risk or blocker','Impact','Mitigation','Owner'], HOME.risks.map(r=>[`${r[0]}<br><span class="chipst ${SEV[r[4]]||'plan'}" style="display:inline-block;margin-top:6px">${r[4]}</span>`, r[1], r[2], r[3]])), false);
 }
-function render(){ head(); health(); homeExtras(); }
+function render(){ head(); health(); homeExtras(); wireComments(); }
 render();
 
 // Side nav highlight
