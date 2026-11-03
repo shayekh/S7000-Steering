@@ -851,7 +851,7 @@ const COLLAB = {
 };
 function sddFlow(C){
   const steps = C.sdd.map((s,i)=>`<li><div class="st ${s[2]} sddrow" data-step="${i}" tabindex="0" role="button" aria-label="Open details: ${esc(s[0])}"><span class="no">${i+1}</span><div><b>${s[0]}</b><span class="d">${s[1]}</span><span class="tg ${s[2]}">${s[3]}</span><span class="gmore" style="display:block;margin-top:6px">Details &rarr;</span></div></div></li>`).join('');
-  return `<div class="sddwrap"><ol class="sdd" aria-label="Spec-driven development flow">${steps}</ol><div class="sddloop">&#8635; When requirements change, go back to step 2 and update the spec first, then repeat.</div><div class="fkey" style="justify-content:center"><span><i style="background:var(--live)"></i>Human</span><span><i style="background:var(--test)"></i>AI</span><span><i style="background:var(--primary)"></i>Human and automation</span></div></div>`;
+  return `<div class="sddwrap"><ol class="sdd" aria-label="Spec-driven development flow">${steps}</ol><div class="sddloop">&#8635; Requirements changed? Update the spec first, then build.</div><div class="fkey" style="justify-content:center"><span><i style="background:var(--live)"></i>Human</span><span><i style="background:var(--test)"></i>AI</span><span><i style="background:var(--primary)"></i>Human and automation</span></div></div>`;
 }
 function renderCollab(kind){
   const C = COLLAB, D = false; // set D = 'Dummy data' to show the tag on placeholder cards again
@@ -888,7 +888,7 @@ function renderCollab(kind){
   $('#viewCollab').innerHTML = kind==='ai' ? aiHtml : work;
   wireComments();
 }
-// ---- Meeting minutes (add each weekly call at the top of MINUTES; prev = id of the earlier call it follows up) ----
+// ---- Meeting minutes (keep the Akademie call after the regular call of the same week; prev = id of the earlier call it follows up) ----
 // Notes may contain links to other calls, for example <a href="#minutes/118">call 118</a>.
 const MINUTES = [
   { id:119, date:'2026-10-14', title:'SELISE X Service 7000: Weekly sync call 119', prev:null,
@@ -900,13 +900,33 @@ const MINUTES = [
       {t:'Internal Projects Contribution', who:'Shayekh', st:'Open', notes:['Michel is responsible for further details']},
       {t:'AOB', who:'Shayekh', notes:[]}
     ]},
-  // SAMPLE call, only to show how links to the previous call look. Delete it when real call 120 is added.
-  { id:120, date:'2026-10-21', title:'SELISE X Service 7000: Weekly sync call 120', prev:119, sample:true,
+  { id:2, date:'2026-10-14', title:'SELISE X Service 7000 (Akademie): Weekly sync call 02', prev:null,
+    s7000:['Marco Cathomas','Michael Pfenninger','Yannic Schneiter','Anna Kutschireiter'],
+    selise:['Ruhul Amin','Abu Sufian','Dipu Mohanto','Shayekh Ebne Mizan'],
+    items:[
+      {t:'RAG Architecture shared with Azure AI Search model', who:'Shayekh', notes:['Raised questions are shared with clients, they will get back','Python will be the language','Deck shared with S7000']},
+      {t:'Data Plan Ready', who:'Shayekh', st:'Open', notes:['Client will get the database ready']},
+      {t:'Next Plan', who:'Shayekh', st:'Open', notes:['SELISE will get a POC ready with mock data']},
+      {t:'AOB', who:'Shayekh', notes:[]}
+    ]},
+  { id:120, date:'2026-10-28', title:'SELISE X Service 7000: Weekly sync call 120', prev:119,
     s7000:['Marco Cathomas','Michael Pfenninger','Yannic Schneiter','Mladen Markovic'],
     selise:['Ruhul Amin','Abu Sufian','Dipu Mohanto','Shayekh Ebne Mizan'],
     items:[
-      {t:'Customer Portal (Repair Reports Creation Enhancement on production)', who:'Shayekh', from:[119,0], st:'Done', notes:['Toggle is live on production','Self-Registration Process (B2B): design started']},
-      {t:'SAM Rollout Expedite', who:'Shayekh', from:[119,1], st:'Done', notes:['Rollout finished','Health is fine']}
+      {t:'Self-Registration Process (B2B)', who:'Shayekh', from:[119,0], st:'Open', notes:['SELISE part is done','The rest will be done by S7000']},
+      {t:'SAM Rollout Done', who:'Shayekh', from:[119,1], st:'Done', notes:['SAM is fully rolled out and in good health']},
+      {t:'Discussion for SDD meeting', who:'', notes:['S7000 agrees']},
+      {t:'AOB', who:'Shayekh', notes:[]}
+    ]},
+  { id:3, date:'2026-10-28', title:'SELISE X Service 7000 (Akademie): Weekly sync call 03', prev:2,
+    s7000:['Marco Cathomas','Michael Pfenninger','Yannic Schneiter','Anna Kutschireiter'],
+    selise:['Ruhul Amin','Abu Sufian','Dipu Mohanto','Shayekh Ebne Mizan'],
+    items:[
+      {t:'POC on mock data', who:'Shayekh', from:[2,2], st:'Open', notes:['SELISE is working on the POC, as some data is shared']},
+      {t:'Data Plan Ready', who:'Shayekh', from:[2,1], st:'Open', notes:['Client will get the final database ready']},
+      {t:'Need collection of questions', who:'Shayekh', notes:['S7000 will share']},
+      {t:'Schema on vector DB for RS Line Data', who:'Shayekh', notes:['Anna will contribute']},
+      {t:'AOB', who:'Shayekh', notes:[]}
     ]}
 ];
 const MF = {year:'', week:'', q:''};
