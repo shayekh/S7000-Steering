@@ -606,7 +606,7 @@ const PROJ = {
     lane:'customer', name:'Customer Portal', health:['ok','Live in production'],
     phase:'Live',
     owners:[['SELISE','Product Manager'],['Client','Business lead']],
-    summary:'Customer Portal is live in production for all users, with additional new features delivered. A dedicated Automation Testing portal, built for the Customer Portal, now tests it on every release and is being made ready for deployment. B2B Self Registration is next, once Service 7000 is confident in the ERP user data.',
+    summary:'Customer Portal is live in production for all users, with additional new features delivered. A dedicated Automation Testing portal, built for the Customer Portal, now tests it on every release and is expected to be delivered by next week. B2B Self Registration is next: Ronny is working on the ERP user data, then SELISE will execute it.',
     objectives:[
       ['Give B2B customers a better experience in one revamped portal','Experience'],
       ['Turn customer data into decisions through the dashboard','Insights'],
@@ -616,19 +616,19 @@ const PROJ = {
     ],
     milestones:[
       ['B2B customers get a better experience in one revamped portal','Achieved','A better experience for B2B customers: dashboard, repair requests, order and device management, settings, user management and a user activity report.','Customer Portal, new features',[['Done','SELISE','Delivered the dashboard, repair requests, order and device management, settings, user management and user activity report to all users. Also fixed order visibility for bundle-assigned users, made the Google address search faster and more reliable (API configuration check pending), and let super admins log in as customer-number accounts.'],['To do','Service 7000','Decide on the Order Chat release. It is delivered, but only shown as a demo to internal teams.']]],
-      ['Every release is protected before it reaches customers','In progress','Automated testing protects every release before it reaches customers.','Automation Testing portal',[['In progress','SELISE','Automation Testing portal in progress, with most test cases automated. Remaining work: fix the failed test cases, automate the rest and make the portal ready for deployment. A production replica is the best way to test it in a real scenario.'],['To do','Service 7000','Deploy the Automation Testing portal on the Service 7000 side once SELISE delivers it.']]],
-      ['A new growth channel: B2B clients register themselves','Upcoming','New B2B clients get started without manual effort.','B2B Self Registration',[['Done','SELISE','Built the invitation email template and solved the blocking dependencies. SELISE has completed its part.'],['To do','Service 7000','Clean up the user data in the ERP database, then push self-registration. Define the trigger events and send the invitation emails from their existing sender setup.']]],
+      ['Every release is protected before it reaches customers','In progress','Automated testing protects every release before it reaches customers.','Automation Testing portal',[['In progress','SELISE','Automation Testing portal in progress, with most test cases automated. Remaining work: fix the failed test cases, automate the rest and make the portal ready for deployment. Delivery is expected by next week. A production replica is the best way to test it in a real scenario.'],['To do','Service 7000','Deploy the Automation Testing portal on the Service 7000 side once SELISE delivers it.']]],
+      ['A new growth channel: B2B clients register themselves','Upcoming','New B2B clients get started without manual effort.','B2B Self Registration',[['Done','SELISE','Built the invitation email template and solved the blocking dependencies. SELISE has completed its part.'],['In progress','Service 7000','Ronny is working on the user data in the ERP database. After he is done, SELISE will execute self-registration. Define the trigger events and send the invitation emails from their existing sender setup.']]],
       ['Customers adopt the portal as their everyday tool','Upcoming','Most registered customers use the portal regularly.','Rollout and adoption',[['Done','SELISE','Portal is live, and many registered customers are already active users.'],['To do','SELISE and Service 7000','Drive adoption so that most registered customers use the portal regularly.']]]
     ],
     testing:{note:'', tiles:[['Test cases','67'],['Automated','70%'],['Passed','57'],['Failed','6'],['Skipped (dependency)','4'],['Pass rate, last run','85.07%'],['Critical defects','0']]},
     blockers:[
       ['Order Chat integration: release decision pending','Delivered and being demoed to internal teams; cannot be released until Service 7000 decides','Service 7000','Open',[0]],
-      ['User data in the ERP database may be wrong','B2B Self Registration waits until Service 7000 is confident in the data quality','Service 7000','Open',[2]]
+      ['User data in the ERP database may be wrong','B2B Self Registration waits until Ronny is done with the ERP user data','Service 7000','Open',[2]]
     ],
     actions:[
       ['Decide on the release of the Order Chat integration','Service 7000','Open'],
-      ['Clean up the ERP user data so self-registration can be pushed','Service 7000','Open'],
-      ['Make the Automation Testing portal ready for deployment','SELISE','In progress']
+      ['Clean up the ERP user data so self-registration can be executed (Ronny)','Service 7000','In progress'],
+      ['Deliver the Automation Testing portal (expected by next week)','SELISE','In progress']
     ],
     decisions:[
       ['Add new features during the rollout','Requested by the business; delivered together to avoid a second release','Approved'],
@@ -648,21 +648,22 @@ const PROJ = {
     lane:'akademie', name:'S7000 Akademie', health:['risk','Needs attention'],
     phase:'POC and R&D',
     owners:[['SELISE','Product Manager'],['Client','Business lead']],
-    summary:'S7000 Akademie is a new project for a knowledge base with semantic (RAG) retrieval, a technician chat and sales arguments. SELISE presented the proof of concept on mock data and works next on data processing, filtering and categories. Service 7000 is preparing the final database and shared a task board on Teams.',
+    summary:'S7000 Akademie is a new project for a knowledge base with semantic (RAG) retrieval, a technician chat and sales arguments. Service 7000 shared the data and the LLM API key. SELISE built the Qdrant indices, the SQL-to-vector pipeline and an end-to-end RAG with Azure LLM. Next: loading three years of historical data (25% done) and evaluating RAG responses.',
     milestones:[
-      ['Technicians get easy access to high-quality support during repair jobs','','A technician chat based on Service 7000 internal expert knowledge.','Technician chat',[['In progress','SELISE','Presented the proof of concept on mock data. Next: data processing, filtering and categories.'],['To do','Service 7000','Decide on the hosted server, RAG model and embedding model, and share the RS Line knowledge.']]],
+      ['Technicians get easy access to high-quality support during repair jobs','','A technician chat based on Service 7000 internal expert knowledge.','Technician chat',[['In progress','SELISE','End-to-end RAG with Azure LLM is working: filtered search, reranking, SQL statistics and source-backed answers. Next: load three years of historical data (25% done), then evaluate RAG responses.'],['To do','Service 7000','Decide on the hosted server, RAG model and embedding model.']]],
       ['Technicians are prepared for their next assignment','','An LLM-driven audio briefing system for technicians preparing for their next assignment.','Audio briefing system',[['To do','SELISE','Design the audio briefing system as part of the proof of concept.'],['To do','Service 7000','Share the knowledge the briefings are based on.']]],
       ['Sales gets fast arguments in plain language','','Automated argument support for sales: easy to access, fast and in plain language.','Sales argument support',[['To do','SELISE','Build sales arguments on top of the knowledge base.'],['To do','Service 7000','Share the RS Line knowledge for the arguments.']]],
       ['Work preparation is automated','','Automation of work preparation.','Work preparation automation',[['To do','SELISE','Define how work preparation can be automated using the knowledge base.'],['To do','Service 7000','Describe the current work preparation steps.']]],
       ['Anyone can find answers without a technical background','','Queries via semantic search, with no technical background needed.','Semantic search',[['To do','SELISE','Proof of concept and R&D for semantic (RAG) retrieval.'],['To do','Service 7000','Decide on the RAG and embedding model.']]]
     ],
     blockers:[
-      ['Hosted server, RAG model and embedding model are not yet decided','Needed before the knowledge base and chat can be built','Service 7000','Open',[0,4]],
-      ['RS Line knowledge (final database) for S7000 Akademie is not yet shared','Service 7000 is still preparing it. The real implementation cannot be done without it','Service 7000','Open',[0,2]]
+      ['Hosted server, RAG model and embedding model are not yet decided','Needed before the knowledge base and chat can be built','Service 7000','Open',[0,4]]
     ],
     actions:[
       ['Decide on the hosted server, RAG model and embedding model','Service 7000','Open'],
-      ['Finish the final database and share access to the RS Line knowledge','Service 7000','Open'],
+      ['Share the final database and the LLM API key','Service 7000','Done'],
+      ['Feed the Service Manual data to the RAG','SELISE','Open'],
+      ['Work on the chatbot Figma prototype feedback','SELISE','Open'],
       ['Share the full collection of questions (a few are shared)','Service 7000','In progress']
     ]
   }
@@ -954,6 +955,28 @@ const MINUTES = [
       {t:'Next priority', who:'Shayekh', st:'Open', notes:['Data processing, filtering and categories']},
       {t:'Task board', who:'Michael', st:'Done', notes:['Michael shared a task board on the Teams channel']},
       {t:'AOB', who:'Shayekh', notes:[]}
+    ]},
+  { id:122, date:'2026-11-11', title:'SELISE X Service 7000: Weekly sync call 122', prev:121,
+    s7000:['Marco Cathomas','Michael Pfenninger','Yannic Schneiter','Mladen Markovic'],
+    selise:['Ruhul Amin','Abu Sufian','Dipu Mohanto','Shayekh Ebne Mizan'],
+    items:[
+      {t:'Test Automation Portal (Customer Portal)', who:'Shayekh', from:[121,1], st:'Open', notes:['Will be delivered by next week (expected)']},
+      {t:'Discussion for SDD meeting (spec-driven development)', who:'Shayekh', from:[121,2], st:'Done', notes:['Presented by SELISE']},
+      {t:'Self-Registration (B2B) decision (Customer Portal)', who:'Sufian', from:[121,4], st:'Open', notes:['Ronny is working on it. After he is done, SELISE will execute']},
+      {t:'AOB', who:'Shayekh', notes:[]}
+    ]},
+  { id:5, date:'2026-11-11', title:'SELISE X Service 7000 (Akademie): Weekly sync call 05', prev:4,
+    s7000:['Marco Cathomas','Michael Pfenninger','Yannic Schneiter','Anna Kutschireiter'],
+    selise:['Ruhul Amin','Abu Sufian','Dipu Mohanto','Shayekh Ebne Mizan'],
+    items:[
+      {t:'Data Plan Ready', who:'Shayekh', from:[4,1], st:'Done', notes:['Data is shared by S7000']},
+      {t:'LLM API key', who:'Sufian', st:'Done', notes:['Shared by S7000']},
+      {t:'Weekly completed task', who:'', st:'Done', notes:['Analyzed source data and index schema','Implemented three Qdrant indices with shared filters','Built the SQL-to-vector DB pipeline','Implemented end-to-end RAG with Azure LLM, filtered search, reranking, SQL statistics and source-backed answers']},
+      {t:'Next priority', who:'Shayekh', from:[4,3], st:'Open', notes:['Loading three years of historical data (25% complete), followed by RAG response evaluation','Analysis of data volume and sensible grouping of devices']},
+      {t:'Weekly task update', who:'Michael', st:'Done', notes:['The weekly task is documented on the S7000 slide']},
+      {t:'Chatbot Figma', who:'Shayekh', st:'Open', notes:['One prototype shared with S7000. SELISE will work on the feedback']},
+      {t:'Service Manual data', who:'Shayekh', st:'Open', notes:['Service Manual data will feed the RAG. SELISE will work on that']},
+      {t:'AOB', who:'Shayekh', notes:[]}
     ]}
 ];
 const MF = {year:'', week:'', q:''};
@@ -1078,7 +1101,6 @@ const HOME = {
     ['Decide on the hosted server, RAG model and embedding model','Needed before the knowledge base and chat can be built','Service 7000','S7000 Akademie']
   ],
   risks:[
-    ['RS Line knowledge for S7000 Akademie is not yet shared','The real implementation cannot be done without it','Service 7000 finishes the final database and shares access','Service 7000','High'],
     ['User data in the ERP database may be wrong','B2B Self Registration cannot be pushed until the data is clean','Service 7000 checks and cleans the ERP user data','Service 7000','Medium']
   ]
 };

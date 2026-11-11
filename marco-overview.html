@@ -128,32 +128,31 @@ tr:last-child td{border-bottom:0}
 
 <script>
 // ---- Content (keep in sync with HEALTH, PROJ and HOME in the Steering Board, index.html) ----
-const ASOF = {date:'11 Nov 2026', week:'Week 46, 2026', calls:'Weekly call 121 and Akademie call 04 (4 Nov)'};
+const ASOF = {date:'11 Nov 2026', week:'Week 46, 2026', calls:'Weekly call 122 and Akademie call 05 (11 Nov)'};
 // [portal, phase: live|dev, health: ok|risk|bad, health label, blockers, where it stands]
 const STATUS = [
-  ['Customer Portal','live','ok','On track',2,'Live for all users. New enhancements delivered. Automation Testing portal is being made ready for deployment. B2B Self Registration waits on clean ERP user data.'],
+  ['Customer Portal','live','ok','On track',2,'Live for all users. New enhancements delivered. Automation Testing portal is expected next week. B2B Self Registration: Ronny is working on the ERP user data, then SELISE will execute.'],
   ['SAM Portal','live','ok','Fully rolled out',0,'Full rollout done and in good health.'],
   ['Tenant Portal','live','ok','On maintenance',0,'Live and stable.'],
   ['AI Service Automation','live','ok','On maintenance',0,'Live, saving about 25% of service time.'],
-  ['S7000 Akademie','dev','risk','Needs attention',2,'Proof of concept on mock data presented. Waiting on the final database and on the model decisions.']
+  ['S7000 Akademie','dev','risk','Needs attention',1,'Data and LLM API key shared. End-to-end RAG with Azure LLM works. Loading historical data (25% done). Waiting on the model decisions.']
 ];
 // [decision, why it matters, portal]
 const DECISIONS = [
   ['Release the Order Chat integration','It is delivered and shown to internal teams only. Release is on hold until this decision.','Customer Portal'],
   ['Choose the hosted server, RAG model and embedding model','Needed before the knowledge base and technician chat can be built.','S7000 Akademie'],
-  ['Confirm when ERP user data is clean enough to push self-registration','B2B Self Registration is ready on the SELISE side and waits on this.','Customer Portal']
+  ['Confirm when the ERP user data is clean (Ronny)','SELISE executes B2B Self Registration once this is done.','Customer Portal']
 ];
 // [risk, impact, severity: High|Medium|Low]
 const RISKS = [
-  ['RS Line knowledge (final database) not yet shared','The real Akademie implementation cannot start without it.','High'],
   ['User data in the ERP database may be wrong','B2B Self Registration cannot go live until the data is clean.','Medium']
 ];
 // [owner, step]
 const NEXT = [
-  ['SELISE','Present spec-driven development (SDD) on the next weekly call.'],
-  ['SELISE','Get the Automation Testing portal ready for deployment and test it on a production replica.'],
-  ['SELISE','Akademie: data processing, filtering and categories.'],
-  ['Service 7000','Share access to the final database and the rest of the Akademie questions.']
+  ['SELISE','Deliver the Automation Testing portal (expected by next week).'],
+  ['SELISE','Akademie: finish loading three years of historical data, then evaluate RAG responses.'],
+  ['SELISE','Akademie: feed the Service Manual data to the RAG and work on the Figma chatbot feedback.'],
+  ['Service 7000','Ronny: finish the ERP user data so SELISE can execute self-registration.']
 ];
 // ------------------------------------------------------------------------------------------------
 
