@@ -1,0 +1,168 @@
+<title>Service 7000 Steering Summary</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* One A4-style sheet: header, portal status table, then decisions | risks + next steps. Tokens match the Steering Board. */
+:root{
+  --bg:#F3F4FA; --panel:#FFFFFF; --ink:#1B1F3B; --muted:#6B7090; --line:#E5E7F2;
+  --primary:#5B5FEF; --primary-soft:#E9EAFD;
+  --dev:#1DA1E0; --dev-soft:#DDF1FB;
+  --live:#1FA463; --live-soft:#DAF3E6;
+  --warn:#A9680B; --warn-soft:#FBEFD5;
+  --bad:#B83232; --bad-soft:#F8DADA;
+  --shadow:0 1px 2px rgba(27,31,59,.04),0 8px 24px rgba(27,31,59,.06);
+  --font:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1020; --panel:#171A30; --ink:#E9EBFA; --muted:#9A9FC4; --line:#272B48;
+    --primary:#8A8DFF; --primary-soft:#25295A;
+    --dev:#4CC0F5; --dev-soft:#12303F;
+    --live:#4CC38A; --live-soft:#163A2B;
+    --warn:#E8B64A; --warn-soft:#3B2F12;
+    --bad:#F08080; --bad-soft:#4A2325;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1020; --panel:#171A30; --ink:#E9EBFA; --muted:#9A9FC4; --line:#272B48;
+  --primary:#8A8DFF; --primary-soft:#25295A;
+  --dev:#4CC0F5; --dev-soft:#12303F;
+  --live:#4CC38A; --live-soft:#163A2B;
+  --warn:#E8B64A; --warn-soft:#3B2F12;
+  --bad:#F08080; --bad-soft:#4A2325;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:14px/1.5 var(--font);padding-block:24px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2{margin:0;letter-spacing:-.015em;text-wrap:balance}
+a{color:var(--primary);font-weight:700;text-decoration:none}
+a:hover{text-decoration:underline}
+:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.sheet{max-width:1040px;margin:0 auto;display:grid;gap:16px}
+.top{display:flex;flex-wrap:wrap;gap:10px 20px;justify-content:space-between;align-items:flex-end}
+.eyebrow{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.top h1{font-size:clamp(22px,3vw,30px);font-weight:800;line-height:1.15}
+.asof{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.asof b{color:var(--ink)}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px 20px;min-width:0}
+.card h2{font-size:16px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.count{font-size:12px;font-weight:700;padding:1px 9px;border-radius:99px;background:var(--primary-soft);color:var(--primary)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th{text-align:left;font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted);padding:0 10px 8px 0;border-bottom:1px solid var(--line)}
+td{padding:10px 10px 10px 0;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+.status{min-width:640px}
+.status td:first-child{font-weight:700;white-space:nowrap}
+.light{display:inline-flex;align-items:center;gap:7px;font-weight:700;white-space:nowrap}
+.light i{width:10px;height:10px;border-radius:50%;flex:none}
+.ok{color:var(--live)} .ok i{background:var(--live)}
+.risk{color:var(--warn)} .risk i{background:var(--warn)}
+.bad{color:var(--bad)} .bad i{background:var(--bad)}
+.chip{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:700;white-space:nowrap}
+.chip.live{background:var(--live-soft);color:var(--live)}
+.chip.dev{background:var(--dev-soft);color:var(--dev)}
+.chip.High{background:var(--bad-soft);color:var(--bad)}
+.chip.Medium{background:var(--warn-soft);color:var(--warn)}
+.chip.Low{background:var(--live-soft);color:var(--live)}
+.chip.portal{background:var(--primary-soft);color:var(--primary)}
+.num{font-variant-numeric:tabular-nums;font-weight:700}
+.num.zero{color:var(--muted);font-weight:500}
+.grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+.stack{display:grid;gap:16px;align-content:start}
+.list{list-style:none;margin:0;padding:0;display:grid}
+.list li{display:grid;gap:4px;padding:10px 0;border-top:1px solid var(--line)}
+.list li:first-child{border-top:0;padding-top:0}
+.list b{font-weight:700;line-height:1.35}
+.list p{margin:0;color:var(--muted);font-size:13px}
+.list .meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:12.5px;color:var(--muted)}
+.next li{grid-template-columns:auto minmax(0,1fr);column-gap:10px;align-items:baseline}
+.who{font-size:11.5px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);min-width:92px}
+.foot{font-size:12.5px;color:var(--muted);text-align:center}
+@media print{
+  body{background:#fff;padding:0;font-size:12px}
+  .card{box-shadow:none;break-inside:avoid;padding:12px 14px}
+  .sheet{gap:10px}
+  .status{min-width:0}
+  @page{size:A4;margin:12mm}
+}
+</style>
+
+<div class="sheet">
+  <header class="top">
+    <div>
+      <div class="eyebrow">SELISE X Service 7000</div>
+      <h1>Steering summary</h1>
+    </div>
+    <div class="asof" id="asof"></div>
+  </header>
+
+  <section class="card" aria-labelledby="hStatus">
+    <h2 id="hStatus">Portal status</h2>
+    <div class="scroll"><table class="status"><thead><tr><th>Portal</th><th>Phase</th><th>Health</th><th>Blockers</th><th>Where it stands</th></tr></thead><tbody id="status"></tbody></table></div>
+  </section>
+
+  <div class="grid">
+    <section class="card" aria-labelledby="hDec">
+      <h2 id="hDec">Decisions for Service 7000 <span class="count" id="decCount"></span></h2>
+      <ul class="list" id="decisions"></ul>
+    </section>
+    <div class="stack">
+      <section class="card" aria-labelledby="hRisk">
+        <h2 id="hRisk">Top risks</h2>
+        <ul class="list" id="risks"></ul>
+      </section>
+      <section class="card" aria-labelledby="hNext">
+        <h2 id="hNext">Next two weeks</h2>
+        <ul class="list next" id="next"></ul>
+      </section>
+    </div>
+  </div>
+
+  <p class="foot">Details, project boards and meeting minutes: <a href="https://claude.ai/artifact/9PzB5mNy5GWe3QM2poprD9" target="_blank" rel="noopener">open the full Steering Board &rarr;</a></p>
+</div>
+
+<script>
+// ---- Content (keep in sync with HEALTH, PROJ and HOME in the Steering Board, index.html) ----
+const ASOF = {date:'11 Nov 2026', week:'Week 46, 2026', calls:'Weekly call 121 and Akademie call 04 (4 Nov)'};
+// [portal, phase: live|dev, health: ok|risk|bad, health label, blockers, where it stands]
+const STATUS = [
+  ['Customer Portal','live','ok','On track',2,'Live for all users. New enhancements delivered. Automation Testing portal is being made ready for deployment. B2B Self Registration waits on clean ERP user data.'],
+  ['SAM Portal','live','ok','Fully rolled out',0,'Full rollout done and in good health.'],
+  ['Tenant Portal','live','ok','On maintenance',0,'Live and stable.'],
+  ['AI Service Automation','live','ok','On maintenance',0,'Live, saving about 25% of service time.'],
+  ['S7000 Akademie','dev','risk','Needs attention',2,'Proof of concept on mock data presented. Waiting on the final database and on the model decisions.']
+];
+// [decision, why it matters, portal]
+const DECISIONS = [
+  ['Release the Order Chat integration','It is delivered and shown to internal teams only. Release is on hold until this decision.','Customer Portal'],
+  ['Choose the hosted server, RAG model and embedding model','Needed before the knowledge base and technician chat can be built.','S7000 Akademie'],
+  ['Confirm when ERP user data is clean enough to push self-registration','B2B Self Registration is ready on the SELISE side and waits on this.','Customer Portal']
+];
+// [risk, impact, severity: High|Medium|Low]
+const RISKS = [
+  ['RS Line knowledge (final database) not yet shared','The real Akademie implementation cannot start without it.','High'],
+  ['User data in the ERP database may be wrong','B2B Self Registration cannot go live until the data is clean.','Medium']
+];
+// [owner, step]
+const NEXT = [
+  ['SELISE','Present spec-driven development (SDD) on the next weekly call.'],
+  ['SELISE','Get the Automation Testing portal ready for deployment and test it on a production replica.'],
+  ['SELISE','Akademie: data processing, filtering and categories.'],
+  ['Service 7000','Share access to the final database and the rest of the Akademie questions.']
+];
+// ------------------------------------------------------------------------------------------------
+
+const $ = s => document.querySelector(s);
+const esc = x => String(x).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+$('#asof').innerHTML = `<span>As of <b>${ASOF.date}</b></span><span><b>${ASOF.week}</b></span><span>Based on ${esc(ASOF.calls)}</span>`;
+$('#status').innerHTML = STATUS.map(s=>`<tr><td>${esc(s[0])}</td><td><span class="chip ${s[1]}">${s[1]==='dev'?'In development':'Live'}</span></td><td><span class="light ${s[2]}"><i aria-hidden="true"></i>${esc(s[3])}</span></td><td><span class="num${s[4]?'':' zero'}">${s[4]}</span></td><td>${esc(s[5])}</td></tr>`).join('');
+$('#decCount').textContent = DECISIONS.length;
+$('#decisions').innerHTML = DECISIONS.map(d=>`<li><b>${esc(d[0])}</b><p>${esc(d[1])}</p><span class="meta"><span class="chip portal">${esc(d[2])}</span></span></li>`).join('');
+$('#risks').innerHTML = RISKS.map(r=>`<li><b>${esc(r[0])}</b><p>${esc(r[1])}</p><span class="meta"><span class="chip ${r[2]}">${r[2]}</span>Owner: Service 7000</span></li>`).join('');
+$('#next').innerHTML = NEXT.map(n=>`<li><span class="who">${esc(n[0])}</span><span>${esc(n[1])}</span></li>`).join('');
+</script>
