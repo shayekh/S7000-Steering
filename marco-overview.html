@@ -128,31 +128,30 @@ tr:last-child td{border-bottom:0}
 
 <script>
 // ---- Content (keep in sync with HEALTH, PROJ and HOME in the Steering Board, index.html) ----
-const ASOF = {date:'11 Nov 2026', week:'Week 46, 2026', calls:'Weekly call 122 and Akademie call 05 (11 Nov)'};
+const ASOF = {date:'18 Nov 2026', week:'Week 47, 2026', calls:'Weekly call 123 and Akademie call 06 (18 Nov)'};
 // [portal, phase: live|dev, health: ok|risk|bad, health label, blockers, where it stands]
 const STATUS = [
-  ['Customer Portal','live','ok','On track',2,'Live for all users. New enhancements delivered. Automation Testing portal is expected next week. B2B Self Registration: Ronny is working on the ERP user data, then SELISE will execute.'],
+  ['Customer Portal','live','ok','On track',2,'Live for all users. Automation Testing portal is delivered and Service 7000 will deploy it. B2B Self Registration is on hold and Order Chat is paused (Service 7000 decisions).'],
   ['SAM Portal','live','ok','Fully rolled out',0,'Full rollout done and in good health.'],
   ['Tenant Portal','live','ok','On maintenance',0,'Live and stable.'],
   ['AI Service Automation','live','ok','On maintenance',0,'Live, saving about 25% of service time.'],
-  ['S7000 Akademie','dev','risk','Needs attention',1,'Data and LLM API key shared. End-to-end RAG with Azure LLM works. Loading historical data (25% done). Waiting on the model decisions.']
+  ['S7000 Akademie','dev','risk','Needs attention',1,'End-to-end RAG works. Real hotline and repair data analysed, grouping and filtering method presented, updated Figma prototype shared. Waiting on the model decisions.']
 ];
 // [decision, why it matters, portal]
 const DECISIONS = [
-  ['Release the Order Chat integration','It is delivered and shown to internal teams only. Release is on hold until this decision.','Customer Portal'],
-  ['Choose the hosted server, RAG model and embedding model','Needed before the knowledge base and technician chat can be built.','S7000 Akademie'],
-  ['Confirm when the ERP user data is clean (Ronny)','SELISE executes B2B Self Registration once this is done.','Customer Portal']
+  ['Will be decided in January 2027: whether Order Chat goes live','It is paused for now.','Customer Portal'],
+  ['Choose the hosted server, RAG model and embedding model','Needed before the knowledge base and technician chat can be built.','S7000 Akademie']
 ];
 // [risk, impact, severity: High|Medium|Low]
 const RISKS = [
-  ['User data in the ERP database may be wrong','B2B Self Registration cannot go live until the data is clean.','Medium']
+  ['B2B Self Registration is on hold','Service 7000 paused it, so there is no new B2B sign-up channel for now.','Medium']
 ];
 // [owner, step]
 const NEXT = [
-  ['SELISE','Deliver the Automation Testing portal (expected by next week).'],
-  ['SELISE','Akademie: finish loading three years of historical data, then evaluate RAG responses.'],
-  ['SELISE','Akademie: feed the Service Manual data to the RAG and work on the Figma chatbot feedback.'],
-  ['Service 7000','Ronny: finish the ERP user data so SELISE can execute self-registration.']
+  ['Service 7000','Deploy the Automation Testing portal (delivered by SELISE).'],
+  ['SELISE','Akademie: implement similar-case search and manual-based retrieval, then validate answers with real searches.'],
+  ['SELISE','Akademie: feed the Service Manual data to the RAG and test with and without chunking.'],
+  ['Service 7000','Order Chat: will be decided in January 2027 whether it goes live.']
 ];
 // ------------------------------------------------------------------------------------------------
 
